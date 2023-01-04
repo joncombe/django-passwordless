@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name="django-passwordless",
-    version="1.0.0",
+    version="1.0.1",
     author="Jon Combe",
     author_email="me@joncombe.net",
     packages=find_packages(),

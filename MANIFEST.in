@@ -2,5 +2,7 @@ include AUTHORS
 include LICENCE
 include README.md
 
+recursive-include passwordless/templates *
+
 global-exclude *.py[co]
 
