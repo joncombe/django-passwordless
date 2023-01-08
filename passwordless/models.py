@@ -22,7 +22,7 @@ class AuthRequest(models.Model):
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(db_index=True, editable=False)
-    type = models.CharField(max_length=1, choices=REQUEST_TYPE_CHOICES)
+    type = models.CharField(max_length=1, choices=REQUEST_TYPE_CHOICES, editable=False)
     hash = models.CharField(
         max_length=64,
         db_index=True,
@@ -34,9 +34,17 @@ class AuthRequest(models.Model):
     email_sent = models.BooleanField(default=False, editable=False)
     is_used = models.BooleanField(default=False, editable=False)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        editable=False,
     )
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Passwordless request"
 
     def create_otp(self):
         otp_length = getattr(
@@ -122,5 +130,9 @@ class AuthRequest(models.Model):
 
 
 class AuthFailure(models.Model):
-    hash = models.CharField(max_length=64, db_index=True)
-    created = models.DateTimeField(auto_now_add=True)
+    hash = models.CharField(max_length=64, db_index=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Passwordless failure"
